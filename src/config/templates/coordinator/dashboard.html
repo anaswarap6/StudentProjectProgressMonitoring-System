@@ -1,0 +1,1561 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Coordinator Dashboard | SPMS
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1e293b;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.coordinator-sidebar {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 260px;
+    height: 100vh;
+
+    background: #0f172a;
+
+    color: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 1000;
+
+    overflow-y: auto;
+
+    box-shadow:
+        4px 0 15px rgba(15, 23, 42, 0.12);
+}
+
+
+/* SIDEBAR SCROLLBAR */
+
+.coordinator-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.coordinator-sidebar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   SIDEBAR LOGO
+   ========================================================= */
+
+.sidebar-logo {
+
+    padding: 25px 20px;
+
+    border-bottom: 1px solid #1e293b;
+}
+
+.sidebar-logo h2 {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+.sidebar-logo p {
+
+    margin: 6px 0 0;
+
+    font-size: 12px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   SIDEBAR MENU
+   ========================================================= */
+
+.sidebar-menu {
+
+    padding: 20px 12px;
+
+    flex: 1;
+}
+
+
+/* MENU TITLE */
+
+.sidebar-title {
+
+    padding: 10px 12px;
+
+    margin-top: 8px;
+
+    margin-bottom: 8px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #64748b;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+/* SIDEBAR LINK */
+
+.sidebar-link {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    margin-bottom: 5px;
+
+    border-radius: 8px;
+
+    color: #cbd5e1;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    transition: all 0.2s ease;
+}
+
+.sidebar-link:hover {
+
+    background: #1e293b;
+
+    color: #ffffff;
+
+    transform: translateX(2px);
+}
+
+
+/* ACTIVE LINK */
+
+.sidebar-link.active {
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+
+/* ICON */
+
+.sidebar-icon {
+
+    width: 24px;
+
+    min-width: 24px;
+
+    text-align: center;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   SIDEBAR USER
+   ========================================================= */
+
+.sidebar-user {
+
+    padding: 18px;
+
+    border-top: 1px solid #1e293b;
+
+    background: #0b1220;
+}
+
+.sidebar-user-name {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #ffffff;
+
+    margin-bottom: 4px;
+}
+
+.sidebar-user-role {
+
+    font-size: 11px;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.sidebar-logout {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 12px 14px;
+
+    margin-top: 12px;
+
+    border-radius: 8px;
+
+    background: #7f1d1d;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.sidebar-logout:hover {
+
+    background: #991b1b;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.coordinator-main {
+
+    margin-left: 260px;
+
+    min-height: 100vh;
+
+    padding: 35px 40px 50px;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.coordinator-container {
+
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.coordinator-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: #ffffff;
+
+    padding: 25px 30px;
+
+    border-radius: 16px;
+
+    margin-bottom: 30px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+.coordinator-header h1 {
+
+    margin: 0 0 7px;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.coordinator-header p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.header-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   ADD STAFF BUTTON
+   ========================================================= */
+
+.add-staff-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 11px 18px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+.add-staff-button:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 30px;
+}
+
+
+.stat-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    background: #ffffff;
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.04);
+
+    transition: 0.25s ease;
+}
+
+.stat-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+
+.stat-icon {
+
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border-radius: 12px;
+
+    font-size: 24px;
+
+    flex-shrink: 0;
+}
+
+
+.stat-card p {
+
+    margin: 0 0 5px;
+
+    font-size: 13px;
+
+    color: #64748b;
+
+    font-weight: 500;
+}
+
+
+.stat-card h2 {
+
+    margin: 0;
+
+    font-size: 25px;
+
+    color: #0f172a;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SECTION CARD
+   ========================================================= */
+
+.section-card {
+
+    background: #ffffff;
+
+    padding: 28px;
+
+    border-radius: 16px;
+
+    border: 1px solid #e2e8f0;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.04);
+}
+
+
+.section-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+
+.section-header h2,
+.section-card > h2 {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    color: #0f172a;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+   ========================================================= */
+
+.primary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 10px 17px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+.primary-button:hover {
+
+    background: #1d4ed8;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   STATUS GRID
+   ========================================================= */
+
+.status-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+}
+
+
+.status-card {
+
+    text-align: center;
+
+    padding: 25px 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    transition: 0.25s ease;
+}
+
+
+.status-card:hover {
+
+    background: #f1f5f9;
+
+    transform: translateY(-3px);
+}
+
+
+.status-card h3 {
+
+    margin: 0 0 8px;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #2563eb;
+}
+
+
+.status-card p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    color: #64748b;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   MANAGEMENT GRID
+   ========================================================= */
+
+.management-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-top: 25px;
+}
+
+
+.management-card {
+
+    display: block;
+
+    padding: 25px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 14px;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    transition: 0.25s ease;
+}
+
+
+.management-card:hover {
+
+    background: #ffffff;
+
+    border-color: #bfdbfe;
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+
+.management-card > span {
+
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border-radius: 12px;
+
+    font-size: 24px;
+
+    margin-bottom: 17px;
+}
+
+
+.management-card h3 {
+
+    margin: 0 0 9px;
+
+    font-size: 17px;
+
+    color: #0f172a;
+
+    font-weight: 700;
+}
+
+
+.management-card p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    color: #64748b;
+}
+
+
+/* STAFF CARD */
+
+.staff-management-card {
+
+    border: 2px dashed #93c5fd;
+
+    background: #eff6ff;
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+   ========================================================= */
+
+.mobile-menu-button {
+
+    display: none;
+
+    position: fixed;
+
+    top: 15px;
+
+    left: 15px;
+
+    z-index: 1100;
+
+    width: 45px;
+
+    height: 45px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #0f172a;
+
+    color: #ffffff;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .stats-grid {
+
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .management-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .status-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .coordinator-sidebar {
+
+        transform: translateX(-100%);
+
+        transition: transform 0.3s ease;
+    }
+
+    .coordinator-sidebar.open {
+
+        transform: translateX(0);
+    }
+
+    .mobile-menu-button {
+
+        display: block;
+    }
+
+    .coordinator-main {
+
+        margin-left: 0;
+
+        padding: 80px 20px 40px;
+    }
+
+    .coordinator-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+    .header-actions {
+
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+    .add-staff-button {
+
+        width: 100%;
+    }
+
+    .stats-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .management-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .status-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .coordinator-main {
+
+        padding: 75px 15px 30px;
+    }
+
+    .coordinator-header {
+
+        padding: 22px;
+    }
+
+    .coordinator-header h1 {
+
+        font-size: 23px;
+    }
+
+    .stats-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .status-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .section-card {
+
+        padding: 20px;
+    }
+
+    .section-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     MOBILE MENU BUTTON
+     ========================================================= -->
+
+<button
+    class="mobile-menu-button"
+    onclick="toggleSidebar()"
+>
+    ☰
+</button>
+
+
+<!-- =========================================================
+     FIXED SIDEBAR
+     ========================================================= -->
+
+<aside class="coordinator-sidebar" id="coordinatorSidebar">
+
+
+    <!-- LOGO -->
+
+    <div class="sidebar-logo">
+
+        <h2>
+            SPMS
+        </h2>
+
+        <p>
+            Coordinator Panel
+        </p>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="sidebar-menu">
+
+
+        <div class="sidebar-title">
+            Main
+        </div>
+
+
+        <!-- DASHBOARD -->
+
+        <a
+            href="{% url 'coordinator:dashboard' %}"
+            class="sidebar-link active"
+        >
+
+            <span class="sidebar-icon">
+                🏠
+            </span>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- PROPOSALS -->
+
+        <a
+            href="{% url 'coordinator:proposals' %}"
+            class="sidebar-link"
+        >
+
+            <span class="sidebar-icon">
+                📁
+            </span>
+
+            <span>
+                Project Proposals
+            </span>
+
+        </a>
+
+
+        <div class="sidebar-title">
+            Staff Management
+        </div>
+
+
+        <!-- ALL STAFF -->
+
+        <a
+            href="{% url 'coordinator:staff' %}"
+            class="sidebar-link"
+        >
+
+            <span class="sidebar-icon">
+                👨‍💼
+            </span>
+
+            <span>
+                Staff Management
+            </span>
+
+        </a>
+
+
+        <!-- ADD STAFF -->
+
+        <a
+            href="{% url 'coordinator:add_staff' %}"
+            class="sidebar-link"
+        >
+
+            <span class="sidebar-icon">
+                ➕
+            </span>
+
+            <span>
+                Add Staff
+            </span>
+
+        </a>
+
+
+        <!-- EXPERT -->
+
+        <a
+            href="{% url 'coordinator:staff' %}"
+            class="sidebar-link"
+        >
+
+            <span class="sidebar-icon">
+                👨‍🏫
+            </span>
+
+            <span>
+                Domain Experts
+            </span>
+
+        </a>
+
+
+        <!-- GUIDE -->
+
+        <a
+            href="{% url 'coordinator:staff' %}"
+            class="sidebar-link"
+        >
+
+            <span class="sidebar-icon">
+                👨‍💻
+            </span>
+
+            <span>
+                Guides
+            </span>
+
+        </a>
+
+
+        <!-- PANEL -->
+
+        <a
+            href="{% url 'coordinator:staff' %}"
+            class="sidebar-link"
+        >
+
+            <span class="sidebar-icon">
+                👥
+            </span>
+
+            <span>
+                Panel Members
+            </span>
+
+        </a>
+
+
+        <div class="sidebar-title">
+            Account
+        </div>
+
+
+        <!-- LOGOUT -->
+
+        <a
+            href="{% url 'accounts:logout' %}"
+            class="sidebar-logout"
+        >
+
+            <span class="sidebar-icon">
+                🚪
+            </span>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+
+    </div>
+
+
+    <!-- USER INFORMATION -->
+
+    <div class="sidebar-user">
+
+        <div class="sidebar-user-name">
+
+            {{ request.user.get_full_name|default:request.user.username }}
+
+        </div>
+
+        <div class="sidebar-user-role">
+
+            Coordinator
+
+        </div>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="coordinator-main">
+
+
+<div class="coordinator-container">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="coordinator-header">
+
+        <div>
+
+            <h1>
+                Coordinator Dashboard
+            </h1>
+
+            <p>
+                Student Project Monitoring System
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a
+                href="{% url 'coordinator:add_staff' %}"
+                class="add-staff-button"
+            >
+                ➕ Add Staff
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STATISTICS
+         ===================================================== -->
+
+    <div class="stats-grid">
+
+
+        <!-- STUDENTS -->
+
+        <div class="stat-card">
+
+            <span class="stat-icon">
+                👨‍🎓
+            </span>
+
+            <div>
+
+                <p>
+                    Students
+                </p>
+
+                <h2>
+                    {{ student_count }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROPOSALS -->
+
+        <div class="stat-card">
+
+            <span class="stat-icon">
+                📁
+            </span>
+
+            <div>
+
+                <p>
+                    Proposals
+                </p>
+
+                <h2>
+                    {{ proposal_count }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXPERTS -->
+
+        <div class="stat-card">
+
+            <span class="stat-icon">
+                👨‍🏫
+            </span>
+
+            <div>
+
+                <p>
+                    Domain Experts
+                </p>
+
+                <h2>
+                    {{ expert_count }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- GUIDES -->
+
+        <div class="stat-card">
+
+            <span class="stat-icon">
+                👨‍💻
+            </span>
+
+            <div>
+
+                <p>
+                    Guides
+                </p>
+
+                <h2>
+                    {{ guide_count }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- PANEL -->
+
+        <div class="stat-card">
+
+            <span class="stat-icon">
+                👥
+            </span>
+
+            <div>
+
+                <p>
+                    Panel Members
+                </p>
+
+                <h2>
+                    {{ panel_count }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PROPOSAL STATUS
+         ===================================================== -->
+
+    <div class="section-card">
+
+
+        <div class="section-header">
+
+            <h2>
+                Proposal Status
+            </h2>
+
+
+            <a
+                href="{% url 'coordinator:proposals' %}"
+                class="primary-button"
+            >
+                View All Proposals
+            </a>
+
+        </div>
+
+
+        <div class="status-grid">
+
+
+            <!-- SUBMITTED -->
+
+            <div class="status-card">
+
+                <h3>
+                    {{ submitted_count }}
+                </h3>
+
+                <p>
+                    Submitted
+                </p>
+
+            </div>
+
+
+            <!-- EXPERT ASSIGNED -->
+
+            <div class="status-card">
+
+                <h3>
+                    {{ expert_assigned_count }}
+                </h3>
+
+                <p>
+                    Expert Assigned
+                </p>
+
+            </div>
+
+
+            <!-- EXPERT APPROVED -->
+
+            <div class="status-card">
+
+                <h3>
+                    {{ expert_approved_count }}
+                </h3>
+
+                <p>
+                    Expert Approved
+                </p>
+
+            </div>
+
+
+            <!-- COORDINATOR APPROVED -->
+
+            <div class="status-card">
+
+                <h3>
+                    {{ approved_count }}
+                </h3>
+
+                <p>
+                    Coordinator Approved
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MANAGEMENT
+         ===================================================== -->
+
+    <div class="section-card">
+
+
+        <h2>
+            Management
+        </h2>
+
+
+        <div class="management-grid">
+
+
+            <!-- PROJECT PROPOSALS -->
+
+            <a
+                href="{% url 'coordinator:proposals' %}"
+                class="management-card"
+            >
+
+                <span>
+                    📁
+                </span>
+
+                <h3>
+                    Project Proposals
+                </h3>
+
+                <p>
+                    Review student proposals and assign Domain Experts.
+                </p>
+
+            </a>
+
+
+
+            <!-- STAFF -->
+
+            <a
+                href="{% url 'coordinator:staff' %}"
+                class="management-card staff-management-card"
+            >
+
+                <span>
+                    👨‍💼
+                </span>
+
+                <h3>
+                    Staff Management
+                </h3>
+
+                <p>
+                    Add and manage Domain Experts, Guides and Panel Members.
+                </p>
+
+            </a>
+
+
+
+            <!-- DOMAIN EXPERT -->
+
+            <a
+                href="{% url 'coordinator:staff' %}"
+                class="management-card"
+            >
+
+                <span>
+                    👨‍🏫
+                </span>
+
+                <h3>
+                    Domain Experts
+                </h3>
+
+                <p>
+                    View and manage Domain Expert accounts.
+                </p>
+
+            </a>
+
+
+
+            <!-- GUIDES -->
+
+            <a
+                href="{% url 'coordinator:staff' %}"
+                class="management-card"
+            >
+
+                <span>
+                    👨‍💻
+                </span>
+
+                <h3>
+                    Guides
+                </h3>
+
+                <p>
+                    Manage project Guide accounts and assignments.
+                </p>
+
+            </a>
+
+
+
+            <!-- PANEL -->
+
+            <a
+                href="{% url 'coordinator:staff' %}"
+                class="management-card"
+            >
+
+                <span>
+                    👥
+                </span>
+
+                <h3>
+                    Panel Members
+                </h3>
+
+                <p>
+                    Manage Panel Member accounts for project evaluation.
+                </p>
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</main>
+
+
+<!-- =========================================================
+     SIDEBAR JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+function toggleSidebar() {
+
+    const sidebar =
+        document.getElementById("coordinatorSidebar");
+
+    sidebar.classList.toggle("open");
+
+}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+Project Proposals | Coordinator
+{% endblock %}
+
+{% block content %}
+
+<div style="
+    max-width:1200px;
+    margin:40px auto;
+    padding:20px;
+">
+
+    <h1>
+        Project Proposals
+    </h1>
+
+    <p>
+        View submitted projects, assign Domain Experts,
+        and provide final approval.
+    </p>
+
+
+    {% if proposals %}
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+        gap:20px;
+        margin-top:30px;
+    ">
+
+        {% for proposal in proposals %}
+
+        <div style="
+            background:white;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            padding:22px;
+        ">
+
+            <h2>
+                {{ proposal.title }}
+            </h2>
+
+            <p>
+                <strong>Student:</strong>
+                {{ proposal.student.get_full_name|default:proposal.student.username }}
+            </p>
+
+            <p>
+                <strong>Domain:</strong>
+                {{ proposal.domain }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ proposal.status }}
+            </p>
+
+            <p>
+
+                <strong>Expert:</strong>
+
+                {% if proposal.domain_expert %}
+
+                    {{ proposal.domain_expert.get_full_name|default:proposal.domain_expert.username }}
+
+                {% else %}
+
+                    Not Assigned
+
+                {% endif %}
+
+            </p>
+
+
+            <a
+                href="{% url 'coordinator:proposal_detail' proposal.id %}"
+                style="
+                    display:inline-block;
+                    padding:10px 16px;
+                    background:#2563eb;
+                    color:white;
+                    text-decoration:none;
+                    border-radius:7px;
+                    margin-top:10px;
+                "
+            >
+                View Proposal
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <p style="margin-top:30px;">
+        No project proposals have been submitted yet.
+    </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
