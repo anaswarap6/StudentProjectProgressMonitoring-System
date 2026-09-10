@@ -71,7 +71,7 @@ def my_proposals(request):
 
     return render(
         request,
-        "expert/proposals.html",
+        "experts/proposals.html",
         {
             "proposals": proposals
         }
