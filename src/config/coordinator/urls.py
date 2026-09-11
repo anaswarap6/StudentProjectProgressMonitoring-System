@@ -196,4 +196,14 @@ urlpatterns = [
         views.delete_staff,
         name="delete_staff"
     ),
+
+    path(
+        "guides/", 
+        views.guides, name="guides"
+        ),
+
+    path(
+        "experts/",
+        views.experts, name="experts"
+        ),
 ]

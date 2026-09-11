@@ -181,18 +181,6 @@ def dashboard(request):
             )[:5],
     }
 
-    print("================================")
-    print("STUDENT COUNT:", students.count())
-    print("STUDENTS:", list(
-        students.values(
-            "id",
-            "username",
-            "role",
-            "is_superuser"
-        )
-    ))
-    print("================================")
-
     return render(
         request,
         "coordinator/dashboard.html",
@@ -1366,4 +1354,39 @@ def students(request):
             "students": students,
             "total_students": total_students,
         }
-    ) 
+    )
+
+
+#  --------guid list-------------
+
+@coordinator_required
+def guides(request):
+    guides = User.objects.filter(
+        role="GUIDE",
+        is_superuser=False
+    ).order_by("username")
+
+    return render(
+        request,
+        "coordinator/guides.html",
+        {
+            "guides": guides,
+            "guide_count": guides.count(),
+        }
+    )
+
+
+# -------expert----------
+
+@coordinator_required
+def experts(request):
+    experts = User.objects.filter(
+        role="EXPERT",
+        is_superuser=False
+    ).order_by("username")
+
+    return render(
+        request,
+        "coordinator/experts.html",
+        {"experts": experts}
+    )
