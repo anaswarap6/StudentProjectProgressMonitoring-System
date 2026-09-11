@@ -63,7 +63,7 @@ def dashboard(request):
 
     return render(
         request,
-        "guides/dashboard.html",
+        "guide/dashboard.html",
         {
             "assigned_projects": assigned_projects,
             "assigned_count": assigned_count,
@@ -93,7 +93,7 @@ def project_detail(request, proposal_id):
 
     return render(
         request,
-        "guides/project_detail.html",
+        "guide/project_detail.html",
         {
             "proposal": proposal
         }
